@@ -321,10 +321,10 @@ elif app_option == 'Mieteinnahmenrechner':
     kaltmiete = st.number_input('Kaltmiete eingeben:', min_value=0.0, format="%.2f")
     instandhaltungskosten = st.number_input('Monatliche Instandhaltungskosten eingeben:', min_value=0.0, format="%.2f")
     hausgeld = st.number_input('Hausgeld eingeben:', min_value=0.0, format="%.2f")
-    mietsteigerung = st.number_input('Geschätzte jährliche Mietsteigerung eingeben:', min_value=0.0, format="%.2f")
     versicherungskosten = st.number_input('Versicherungskosten eingeben:', min_value=0.0, format="%.2f")
     leerstand = st.number_input('Geschätzten Leerstand im Jahr (in Monaten) eingeben:', min_value=0.0, format="%.2f")
     mietdauer = st.number_input('Mietdauer (in Jahren) eingeben:', min_value=0, step=1, format="%d")
+    mietsteigerung = st.number_input('Geschätzte jährliche Netto-Mietsteigerung (in %) eingeben:', min_value=0.0, format="%.2f")
     
     nettomiete = kaltmiete - instandhaltungskosten - hausgeld - versicherungskosten - leerstand/12*kaltmiete
     jaehrliche_nettomiete = nettomiete*12
