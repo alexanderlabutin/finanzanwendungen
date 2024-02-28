@@ -344,10 +344,10 @@ elif app_option == 'Mieteinnahmenrechner':
 
         
 elif app_option == 'Immobilienwertrechner':
-     st.title('Immobillienwertrechner')
+     st.title('Immobilienwertrechner')
      
      immobilienwert = st.number_input('Immobillienwert eingeben:', min_value=0.0, format="%.2f")
-     immobilienrendite = st.number_input('Geschätzte jährliche Preissteigerung der Immobillie in % eingeben:', min_value=0.0, format="%.2f")
+     immobilienrendite = st.number_input('Geschätzte jährliche Preissteigerung der Immobillie (in %) eingeben:', min_value=0.0, format="%.2f")
      
      haltedauer = st.number_input('Haltedauer (in Jahren) eingeben:', min_value=0, step=1, format="%d")
      
