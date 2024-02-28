@@ -11,7 +11,7 @@ if app_option == 'Sparplanrechner':
     # Eingabefelder für den Investitionsrechner
     start_kapital = st.number_input("Startkapital eingeben:", min_value=0.0, format="%.2f")
     jaehrliche_rendite = st.number_input("Jährliche Rendite in % eingeben:", min_value=0.0, format="%.2f")
-    monatliche_sparrate_vorschuessig = st.number_input("Monatliche Sparrate (vorschüssig) eingeben:", min_value=0.0, format="%.2f")
+    monatliche_sparrate_vorschuessig = st.number_input("Monatlichen Sparbetrag (vorschüssig) eingeben:", min_value=0.0, format="%.2f")
     anlage_zeitraum = st.number_input("Anlagezeitraum in Jahren eingeben:", min_value=0, step=1, format="%d")
     
     st.divider()
@@ -116,7 +116,7 @@ elif app_option == 'Tilgungsrechner':
 
     # Eingabefelder für den Tilgungsrechner
     restkredit = st.number_input('Kreditsumme eingeben:', min_value=0.0, format="%.2f")
-    tilgungsrate_monatlich = st.number_input('Monatliche Tilgungsrate eingeben:', min_value=0.0, format="%.2f")
+    tilgungsrate_monatlich = st.number_input('Monatlichen Tilgungsbetrag eingeben:', min_value=0.0, format="%.2f")
     kreditzins = st.number_input('Kreditzins in % eingeben:', min_value=0.0, format="%.2f")
     zinsbindungsdauer = st.number_input('Zinsbindungsdauer in Jahren eingeben (optional):', min_value=0, format="%.2i")
    
