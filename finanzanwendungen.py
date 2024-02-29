@@ -195,6 +195,31 @@ elif app_option == 'Tilgungsrechner':
             
             st.metric(label="Gesamtbelastung nach vollständiger Kredittilgung:", value=f"{kumulierte_zinsaufwendungen[-1] + kreditsumme:,.2f} €   🙉", delta=None)
             
+           
+          
+            
+            # Optionale Ausgabe, wenn bereits Berechnungen durchgeführt wurden
+
+            if zinsbindungsdauer == 0:
+                pass
+            elif zinsbindungsdauer*12 > counter:
+                
+                st.divider()
+                #--------------------------------------------------------------------#
+      
+                st.write("Die Kreditsumme ist bereits vor Erreichung der Zinsbindungsdauer komplett abbezahlt.")
+                #st.metric(label="Zinsanteil nach vollständiger Kredittilgung:", value=f"{kumulierte_zinsaufwendungen[-1]:,.2f} €", delta=None)
+            else:
+                
+                st.divider()
+                #--------------------------------------------------------------------#
+    
+                #st.write(f"Die kumulierten Zinsaufwendungen nach {zinsbindungsdauer} Jahr(en) betragen: {kumulierte_zinsaufwendungen[zinsbindungsdauer*12-1]:,.2f} €")
+                st.metric(label="Zinsaufwendungen nach Zinsbindungsdauer:", value=f"{kumulierte_zinsaufwendungen[zinsbindungsdauer*12-1]:,.2f} €", delta=None)
+                #st.write(f"Die Restschuld nach {zinsbindungsdauer} Jahr(en) beträgt: {restkredit_nach_tilgung[zinsbindungsdauer*12-1]:,.2f} Euro")
+                st.metric(label="Offener Kredit nach Zinsbindungsdauer:", value=f"{restkredit_nach_tilgung[zinsbindungsdauer*12-1]:,.2f} €", delta=None)
+                               
+           
             if immowert:
                 
                 st.divider()
@@ -208,24 +233,6 @@ elif app_option == 'Tilgungsrechner':
                     #st.write(f'Der Immobillienwert nach vollständiger Kredittilgung (nach {counter/12:,.2f} Jahren): {IeW:.2f}')
                     st.metric(label="Immobillienwert nach vollständiger Kredittilgung:", value=f"{IeW:,.2f} €", delta=None)
 
-          
-            
-            # Optionale Ausgabe, wenn bereits Berechnungen durchgeführt wurden
-
-            if zinsbindungsdauer == 0:
-                pass
-            elif zinsbindungsdauer*12 > counter:
-      
-                st.write(f"Die Kreditsumme ist bereits nach {counter//12} Jahren und {counter%12} Monaten komplett abbezahlt.")
-                #st.metric(label="Zinsanteil nach vollständiger Kredittilgung:", value=f"{kumulierte_zinsaufwendungen[-1]:,.2f} €", delta=None)
-            else:
-    
-                #st.write(f"Die kumulierten Zinsaufwendungen nach {zinsbindungsdauer} Jahr(en) betragen: {kumulierte_zinsaufwendungen[zinsbindungsdauer*12-1]:,.2f} €")
-                st.metric(label="Zinsaufwendungen nach Zinsbindungsdauer:", value=f"{kumulierte_zinsaufwendungen[zinsbindungsdauer*12-1]:,.2f} €", delta=None)
-                #st.write(f"Die Restschuld nach {zinsbindungsdauer} Jahr(en) beträgt: {restkredit_nach_tilgung[zinsbindungsdauer*12-1]:,.2f} Euro")
-                st.metric(label="Offener Kredit nach Zinsbindungsdauer:", value=f"{restkredit_nach_tilgung[zinsbindungsdauer*12-1]:,.2f} €", delta=None)
-                               
-           
 
             
             if vermietet:
