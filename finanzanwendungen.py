@@ -150,6 +150,7 @@ elif app_option == 'Tilgungsrechner':
     # Berechnen Button
     if st.button('Berechnung starten'):      
         restkredit_nach_tilgung = []  # Restkredit nach Tilgung
+        kreditsumme = restkredit
 
         zinsaufwendungen = []  # monatliche Zinsaufwendungen
         kumulierte_zinsaufwendungen = []  # kumulierte Zinsaufwendungen
@@ -191,6 +192,8 @@ elif app_option == 'Tilgungsrechner':
 
             # st.write(f'Die Zinslast über die gesamte Laufzeit beträgt {kumulierte_zinsaufwendungen[-1]:,.2f} Euro')
             st.metric(label="Zinsaufwendungen nach vollständiger Kredittilgung:", value=f"{kumulierte_zinsaufwendungen[-1]:,.2f} €", delta=None)
+            
+            st.metric(label="Gesamtbelastung nach vollständiger Kredittilgung:", value=f"{kumulierte_zinsaufwendungen[-1] + kreditsumme:,.2f} €", delta=None)
             
             if immowert:
             
