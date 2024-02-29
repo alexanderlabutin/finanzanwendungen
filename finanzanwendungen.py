@@ -191,11 +191,14 @@ elif app_option == 'Tilgungsrechner':
             st.metric(label="Vollständige Kredittilgung:", value=f"in {counter} Monaten ({counter//12} Jahre und {counter%12} Monate)" , delta=None)
 
             # st.write(f'Die Zinslast über die gesamte Laufzeit beträgt {kumulierte_zinsaufwendungen[-1]:,.2f} Euro')
-            st.metric(label="Zinsaufwendungen nach vollständiger Kredittilgung:", value=f"{kumulierte_zinsaufwendungen[-1]:,.2f} €", delta=None)
+            st.metric(label="Zinsaufwendungen nach vollständiger Kredittilgung:", value=f"{kumulierte_zinsaufwendungen[-1]:,.2f} €   🙈", delta=None)
             
-            st.metric(label="Gesamtbelastung nach vollständiger Kredittilgung:", value=f"{kumulierte_zinsaufwendungen[-1] + kreditsumme:,.2f} €", delta=None)
+            st.metric(label="Gesamtbelastung nach vollständiger Kredittilgung:", value=f"{kumulierte_zinsaufwendungen[-1] + kreditsumme:,.2f} €   🙉", delta=None)
             
             if immowert:
+                
+                st.divider()
+                #--------------------------------------------------------------------#
             
                 # Immobilienwert nach abzahlung der Kreditsumme
                 IeW = immobilienwert*(1+immobilienrendite/100)**(counter/12)
@@ -205,8 +208,7 @@ elif app_option == 'Tilgungsrechner':
                     #st.write(f'Der Immobillienwert nach vollständiger Kredittilgung (nach {counter/12:,.2f} Jahren): {IeW:.2f}')
                     st.metric(label="Immobillienwert nach vollständiger Kredittilgung:", value=f"{IeW:,.2f} €", delta=None)
 
-            st.divider()
-            #--------------------------------------------------------------------#
+          
             
             # Optionale Ausgabe, wenn bereits Berechnungen durchgeführt wurden
 
@@ -223,11 +225,14 @@ elif app_option == 'Tilgungsrechner':
                 #st.write(f"Die Restschuld nach {zinsbindungsdauer} Jahr(en) beträgt: {restkredit_nach_tilgung[zinsbindungsdauer*12-1]:,.2f} Euro")
                 st.metric(label="Offener Kredit nach Zinsbindungsdauer:", value=f"{restkredit_nach_tilgung[zinsbindungsdauer*12-1]:,.2f} €", delta=None)
                                
-            st.divider()
-            #--------------------------------------------------------------------#
+           
 
             
             if vermietet:
+                
+                st.divider()
+                #--------------------------------------------------------------------#
+                
                 # Berechne die Nettomieteinnahmen über die Laufzeit des Kredites           
                 nettomiete = kaltmiete - instandhaltungskosten - hausgeld - versicherungskosten - leerstand/12*kaltmiete
                 jaehrliche_nettomiete = nettomiete*12
