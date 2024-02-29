@@ -116,8 +116,8 @@ elif app_option == 'Tilgungsrechner':
 
     # Eingabefelder für den Tilgungsrechner
     restkredit = st.number_input('Kreditsumme eingeben:', min_value=0.0, format="%.2f")
-    tilgungsrate_monatlich = st.number_input('Monatliche Tilgungsrate eingeben:', min_value=0.0, format="%.2f")
-    kreditzins = st.number_input('Kreditzins in % eingeben:', min_value=0.0, format="%.2f")
+    tilgungsrate_monatlich = st.number_input('Monatliche Annuität (Tilgung + Zins) eingeben:', min_value=0.0, format="%.2f")
+    kreditzins = st.number_input('Nominalen Kreditzins (in %) eingeben:', min_value=0.0, format="%.2f")
     zinsbindungsdauer = st.number_input('Zinsbindungsdauer in Jahren eingeben (optional):', min_value=0, format="%.2i")
    
     st.divider()
@@ -150,10 +150,13 @@ elif app_option == 'Tilgungsrechner':
     # Berechnen Button
     if st.button('Berechnung starten'):      
         restkredit_nach_tilgung = []  # Restkredit nach Tilgung
-        kumulierte_zinsaufwendungen = []  # kumulierte Zinsaufwendungen
+
         zinsaufwendungen = []  # monatliche Zinsaufwendungen
+        kumulierte_zinsaufwendungen = []  # kumulierte Zinsaufwendungen
+        
         tilgungsanteile = []
         kumulierte_tilgungsanteile = []
+        
         counter = 0  # zählt die Monate
         erste_zinsaufwendung = restkredit * (kreditzins / (12 * 100))  # erste Zinsaufwendung
 
@@ -179,7 +182,7 @@ elif app_option == 'Tilgungsrechner':
 
             st.write('-' * 20)
             # st.write(f'Die Kreditsumme ist nach {counter} Monaten (oder {counter/12:,.2f} Jahren) abbezahlt !')
-            st.metric(label="Vollständige Kredittilfung in:", value=f"{counter} Monaten oder {counter/12:,.2f} Jahren", delta=None)
+            st.metric(label="Vollständige Kredittilgung in:", value=f"{counter} Monaten oder {counter/12:,.2f} Jahren", delta=None)
 
             # st.write(f'Die Zinslast über die gesamte Laufzeit beträgt {kumulierte_zinsaufwendungen[-1]:,.2f} Euro')
             st.metric(label="Zinsaufwendungen nach vollständiger Kredittilgung:", value=f"{kumulierte_zinsaufwendungen[-1]:,.2f} €", delta=None)
@@ -312,6 +315,32 @@ elif app_option == 'Tilgungsrechner':
             # Anzeigen des Plotly-Graphen in Streamlit
             st.plotly_chart(fig_3, use_container_width=True)
             
+            
+            df_5 = pd.DataFrame({
+                "Monat": range(1, len(restkredit_nach_tilgung) + 1),  # Erzeugt eine Liste von Monaten
+                "Annuität": [tilgungsrate_monatlich] * len(restkredit_nach_tilgung),  # Wiederholt den Wert für jede Zeile
+                "Tilgungsanteil": tilgungsanteile,
+                "Tilgung (kumuliert)": kumulierte_tilgungsanteile,
+                "Zinsanteil": zinsaufwendungen,
+                "Zinsen (kumuliert)": kumulierte_zinsaufwendungen,
+                "Restsumme": restkredit_nach_tilgung
+                })
+            
+            df_5.set_index("Monat", inplace=True)
+            
+            df_styled = df_5.style.format({
+                "Restsumme": "{:,.2f} €",
+                "Annuität": "{:,.2f} €",
+                "Tilgungsanteil": "{:,.2f} €",
+                "Tilgung (kumuliert)": "{:,.2f} €",
+                "Zinsanteil": "{:,.2f} €",
+                "Zinsen (kumuliert)": "{:,.2f} €"
+                })
+
+
+            # Anzeigen der Tabelle in der Streamlit App
+            st.dataframe(df_styled)
+            
 ##################################################################################################################################################
 
 
@@ -321,10 +350,10 @@ elif app_option == 'Mieteinnahmenrechner':
     kaltmiete = st.number_input('Kaltmiete eingeben:', min_value=0.0, format="%.2f")
     instandhaltungskosten = st.number_input('Monatliche Instandhaltungskosten eingeben:', min_value=0.0, format="%.2f")
     hausgeld = st.number_input('Hausgeld eingeben:', min_value=0.0, format="%.2f")
-    mietsteigerung = st.number_input('Geschätzte jährliche Mietsteigerung eingeben:', min_value=0.0, format="%.2f")
     versicherungskosten = st.number_input('Versicherungskosten eingeben:', min_value=0.0, format="%.2f")
     leerstand = st.number_input('Geschätzten Leerstand im Jahr (in Monaten) eingeben:', min_value=0.0, format="%.2f")
     mietdauer = st.number_input('Mietdauer (in Jahren) eingeben:', min_value=0, step=1, format="%d")
+    mietsteigerung = st.number_input('Geschätzte jährliche Netto-Mietsteigerung (in %) eingeben:', min_value=0.0, format="%.2f")
     
     nettomiete = kaltmiete - instandhaltungskosten - hausgeld - versicherungskosten - leerstand/12*kaltmiete
     jaehrliche_nettomiete = nettomiete*12
@@ -344,10 +373,10 @@ elif app_option == 'Mieteinnahmenrechner':
 
         
 elif app_option == 'Immobilienwertrechner':
-     st.title('Immobillienwertrechner')
+     st.title('Immobilienwertrechner')
      
      immobilienwert = st.number_input('Immobillienwert eingeben:', min_value=0.0, format="%.2f")
-     immobilienrendite = st.number_input('Geschätzte jährliche Preissteigerung der Immobillie in % eingeben:', min_value=0.0, format="%.2f")
+     immobilienrendite = st.number_input('Geschätzte jährliche Preissteigerung der Immobillie (in %) eingeben:', min_value=0.0, format="%.2f")
      
      haltedauer = st.number_input('Haltedauer (in Jahren) eingeben:', min_value=0, step=1, format="%d")
      
