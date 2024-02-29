@@ -150,10 +150,13 @@ elif app_option == 'Tilgungsrechner':
     # Berechnen Button
     if st.button('Berechnung starten'):      
         restkredit_nach_tilgung = []  # Restkredit nach Tilgung
-        kumulierte_zinsaufwendungen = []  # kumulierte Zinsaufwendungen
+
         zinsaufwendungen = []  # monatliche Zinsaufwendungen
+        kumulierte_zinsaufwendungen = []  # kumulierte Zinsaufwendungen
+        
         tilgungsanteile = []
         kumulierte_tilgungsanteile = []
+        
         counter = 0  # zählt die Monate
         erste_zinsaufwendung = restkredit * (kreditzins / (12 * 100))  # erste Zinsaufwendung
 
@@ -311,6 +314,32 @@ elif app_option == 'Tilgungsrechner':
             
             # Anzeigen des Plotly-Graphen in Streamlit
             st.plotly_chart(fig_3, use_container_width=True)
+            
+            
+            df_5 = pd.DataFrame({
+                "Monat": range(1, len(restkredit_nach_tilgung) + 1),  # Erzeugt eine Liste von Monaten
+                "Annuität": [tilgungsrate_monatlich] * len(restkredit_nach_tilgung),  # Wiederholt den Wert für jede Zeile
+                "Tilgungsanteil": tilgungsanteile,
+                "Tilgung (kumuliert)": kumulierte_tilgungsanteile,
+                "Zinsanteil": zinsaufwendungen,
+                "Zinsen (kumuliert)": kumulierte_zinsaufwendungen,
+                "Restsumme": restkredit_nach_tilgung
+                })
+            
+            df_5.set_index("Monat", inplace=True)
+            
+            df_styled = df_5.style.format({
+                "Restsumme": "{:,.2f} €",
+                "Annuität": "{:,.2f} €",
+                "Tilgungsanteil": "{:,.2f} €",
+                "Tilgung (kumuliert)": "{:,.2f} €",
+                "Zinsanteil": "{:,.2f} €",
+                "Zinsen (kumuliert)": "{:,.2f} €"
+                })
+
+
+            # Anzeigen der Tabelle in der Streamlit App
+            st.dataframe(df_styled)
             
 ##################################################################################################################################################
 
