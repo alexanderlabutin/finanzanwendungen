@@ -187,7 +187,7 @@ elif app_option == 'Tilgungsrechner':
 
             st.write('-' * 20)
             # st.write(f'Die Kreditsumme ist nach {counter} Monaten (oder {counter/12:,.2f} Jahren) abbezahlt !')
-            st.metric(label="Vollständige Kredittilgung in:", value=f"{counter} Monaten oder {counter/12:,.2f} Jahren", delta=None)
+            st.metric(label="Vollständige Kredittilgung:", value=f"in {counter} Monaten ({counter//12} Jahre und {counter%12} Monate)" , delta=None)
 
             # st.write(f'Die Zinslast über die gesamte Laufzeit beträgt {kumulierte_zinsaufwendungen[-1]:,.2f} Euro')
             st.metric(label="Zinsaufwendungen nach vollständiger Kredittilgung:", value=f"{kumulierte_zinsaufwendungen[-1]:,.2f} €", delta=None)
@@ -211,7 +211,7 @@ elif app_option == 'Tilgungsrechner':
                 pass
             elif zinsbindungsdauer*12 > counter:
       
-                st.write(f"Die Kreditsumme ist bereits nach {counter / 12:.2f} Jahren komplett abbezahlt.")
+                st.write(f"Die Kreditsumme ist bereits nach {counter//12} Jahren und {counter%12} Monaten komplett abbezahlt.")
                 #st.metric(label="Zinsanteil nach vollständiger Kredittilgung:", value=f"{kumulierte_zinsaufwendungen[-1]:,.2f} €", delta=None)
             else:
     
