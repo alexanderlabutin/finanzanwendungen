@@ -170,11 +170,16 @@ elif app_option == 'Tilgungsrechner':
                 zinsaufwendungen.append(monatliche_zinsaufwendung)
                 kumulierte_zinsaufwendungen.append(sum(zinsaufwendungen))
                 
+                if tilgungsrate_monatlich <= restkredit:
+                    monatlicher_tilgungsanteil = tilgungsrate_monatlich - monatliche_zinsaufwendung
+                else:
+                    monatlicher_tilgungsanteil = restkredit 
+                
                 restkredit -= (tilgungsrate_monatlich - monatliche_zinsaufwendung)
                 restkredit = max(restkredit, 0)  # Verhindert negative Restschuld
                 restkredit_nach_tilgung.append(restkredit)
                 
-                monatlicher_tilgungsanteil = tilgungsrate_monatlich - monatliche_zinsaufwendung
+                
                 tilgungsanteile.append(monatlicher_tilgungsanteil)
                 kumulierte_tilgungsanteile.append(sum(tilgungsanteile))
                 
@@ -316,12 +321,15 @@ elif app_option == 'Tilgungsrechner':
             st.plotly_chart(fig_3, use_container_width=True)
             
             
+            annuitaet_liste = [tilgungsrate_monatlich] * (len(restkredit_nach_tilgung) - 1)
+            annuitaet_liste.append(restkredit_nach_tilgung[-2] + zinsaufwendungen[-1]) 
+            
             df_5 = pd.DataFrame({
                 "Monat": range(1, len(restkredit_nach_tilgung) + 1),  # Erzeugt eine Liste von Monaten
-                "Annuität": [tilgungsrate_monatlich] * len(restkredit_nach_tilgung),  # Wiederholt den Wert für jede Zeile
+                "Annuität": annuitaet_liste ,  # Wiederholt den Wert für jede Zeile
                 "Tilgungsanteil": tilgungsanteile,
-                "Tilgung (kumuliert)": kumulierte_tilgungsanteile,
                 "Zinsanteil": zinsaufwendungen,
+                "Tilgung (kumuliert)": kumulierte_tilgungsanteile,              
                 "Zinsen (kumuliert)": kumulierte_zinsaufwendungen,
                 "Restsumme": restkredit_nach_tilgung
                 })
