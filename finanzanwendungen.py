@@ -117,7 +117,7 @@ elif app_option == 'Tilgungsrechner':
     # Eingabefelder für den Tilgungsrechner
     restkredit = st.number_input('Kreditsumme eingeben:', min_value=0.0, format="%.2f")
     tilgungsrate_monatlich = st.number_input('Monatliche Annuität (Tilgung + Zins) eingeben:', min_value=0.0, format="%.2f")
-    kreditzins = st.number_input('Kreditzins in % eingeben:', min_value=0.0, format="%.2f")
+    kreditzins = st.number_input('Nominalen Kreditzins (in %) eingeben:', min_value=0.0, format="%.2f")
     zinsbindungsdauer = st.number_input('Zinsbindungsdauer in Jahren eingeben (optional):', min_value=0, format="%.2i")
    
     st.divider()
