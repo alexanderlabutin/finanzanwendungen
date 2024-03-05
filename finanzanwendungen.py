@@ -1,7 +1,6 @@
 import streamlit as st
 import pandas as pd
 import plotly.graph_objs as go
-import matplotlib.pyplot as plt
 
 st.sidebar.title('Finanzanwendungen')
 app_option = st.sidebar.radio('Wählen Sie eine Anwendung:', ['Sparplanrechner', 'Tilgungsrechner', 'Mieteinnahmenrechner', 'Immobilienwertrechner', 'Auszahlungsplanrechner'])
