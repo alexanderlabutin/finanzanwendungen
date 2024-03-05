@@ -3,7 +3,7 @@ import pandas as pd
 import plotly.graph_objs as go
 
 st.sidebar.title('Finanzanwendungen')
-app_option = st.sidebar.radio('Wählen Sie eine Anwendung:', ['Sparplanrechner', 'Tilgungsrechner', 'Mieteinnahmenrechner', 'Immobilienwertrechner'])
+app_option = st.sidebar.radio('Wählen Sie eine Anwendung:', ['Sparplanrechner', 'Tilgungsrechner', 'Mieteinnahmenrechner', 'Immobilienwertrechner', 'Auszahlungsplanrechner'])
 
 if app_option == 'Sparplanrechner':
     st.title('Sparplanrechner')
@@ -413,3 +413,58 @@ elif app_option == 'Immobilienwertrechner':
 
         #st.write(f'Der Immobillienwert nach vollständiger Kredittilgung (nach {counter/12:,.2f} Jahren): {IeW:.2f}')
         st.metric(label=f"Immobillienwert nach {haltedauer} Jahren:", value=f"{IeW:,.2f} €", delta=None)
+        
+##################################################################################################################################################
+
+elif app_option == 'Auszahlungsplanrechner':
+    st.title('Auszahlungsplanrechner')        
+        
+    start_kapital = st.number_input('Startkapital eingeben:', min_value=0.0, format="%.2f")
+    
+    erwartete_rendite = st.number_input('Jährliche Rendite (in %) eingeben:', min_value=0.0, format="%.2f")  
+    
+    monatliche_auszahlung = st.number_input('Monatliche Auzahlung eingeben:', min_value=0.0, format="%.2f") 
+    
+    st.divider()
+    #--------------------------------------------------------------------#
+    
+    if st.button('Berechnung starten'):    
+    
+        rest_kapital = start_kapital
+        monat = 0
+        erste_monatliche_rendite = start_kapital * (erwartete_rendite/(12*100))
+        
+        daten = []
+            
+        if erste_monatliche_rendite > monatliche_auszahlung:
+            st.write(f'Die monatliche Auszahlung muss die monatliche Rendite ({erste_monatliche_rendite:.2f} €) übersteigen.')
+        else:  
+            while rest_kapital > monatliche_auszahlung:      
+                
+                monatliche_rendite = rest_kapital * (erwartete_rendite/(12*100))
+               
+                rest_kapital = rest_kapital * (1+erwartete_rendite/(12*100)) - monatliche_auszahlung
+                
+                monat += 1
+                
+                daten.append([monat, monatliche_auszahlung, monatliche_rendite, rest_kapital])
+        
+        
+        st.write(f'Das Kapital ist nach {monat // 12} Jahren und {monat % 12} Monaten aufgebraucht')
+        
+        
+        df_6 = pd.DataFrame(daten, columns=['Monat', 'Monatliche Auszahlung', 'Monatliche Rendite', 'Restkapital'])
+
+        df_6.set_index("Monat", inplace=True)   
+        
+        # Konvertieren der Werte in Euro-Format, außer der ersten Spalte (Monat)
+        df_6['Monatliche Auszahlung'] = df_6['Monatliche Auszahlung'].apply(lambda x: f"{x:,.2f} €")
+        df_6['Monatliche Rendite'] = df_6['Monatliche Rendite'].apply(lambda x: f"{x:,.2f} €")
+        df_6['Restkapital'] = df_6['Restkapital'].apply(lambda x: f"{x:,.2f} €")
+        
+
+        # Anzeige des DataFrames
+        st.write(df_6)
+    
+
+
