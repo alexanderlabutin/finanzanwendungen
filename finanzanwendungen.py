@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import plotly.graph_objs as go
+import matplotlib.pyplot as plt
 
 st.sidebar.title('Finanzanwendungen')
 app_option = st.sidebar.radio('Wählen Sie eine Anwendung:', ['Sparplanrechner', 'Tilgungsrechner', 'Mieteinnahmenrechner', 'Immobilienwertrechner', 'Auszahlungsplanrechner'])
@@ -423,7 +424,9 @@ elif app_option == 'Auszahlungsplanrechner':
     
     erwartete_rendite = st.number_input('Jährliche Rendite (in %) eingeben:', min_value=0.0, format="%.2f")  
     
-    monatliche_auszahlung = st.number_input('Monatliche Auzahlung eingeben:', min_value=0.0, format="%.2f") 
+    monatliche_auszahlung = st.number_input('Monatliche Auszahlung eingeben:', min_value=0.0, format="%.2f") 
+    
+    auszahlungsdauer = st.number_input('Auszahlungsdauer in Jahren eingeben (optional):', min_value=0, step=1, format="%d")
     
     st.divider()
     #--------------------------------------------------------------------#
@@ -442,29 +445,45 @@ elif app_option == 'Auszahlungsplanrechner':
             while rest_kapital > monatliche_auszahlung:      
                 
                 monatliche_rendite = rest_kapital * (erwartete_rendite/(12*100))
-               
                 rest_kapital = rest_kapital * (1+erwartete_rendite/(12*100)) - monatliche_auszahlung
-                
                 monat += 1
-                
                 daten.append([monat, monatliche_auszahlung, monatliche_rendite, rest_kapital])
+                
+            st.divider()
+            #--------------------------------------------------------------------#
+                
+            auszahlungs_monate = auszahlungsdauer * 12
+            
+            if auszahlungs_monate <= len(daten) and auszahlungsdauer != 0:
+                restkapital_nach_auszahlungsdauer = daten[auszahlungs_monate - 1][3]  # -1, da Listen bei 0 anfangen
+                st.metric(label=f"Restkapital nach {auszahlungsdauer} Jahren:", value=f"{restkapital_nach_auszahlungsdauer:,.2f} €", delta=None)
+                
+                st.divider()
+                #--------------------------------------------------------------------#
+            else:
+                pass
+               
         
-        
-        st.write(f'Das Kapital ist nach {monat // 12} Jahren und {monat % 12} Monaten aufgebraucht')
-        
-        
-        df_6 = pd.DataFrame(daten, columns=['Monat', 'Monatliche Auszahlung', 'Monatliche Rendite', 'Restkapital'])
-
-        df_6.set_index("Monat", inplace=True)   
-        
-        # Konvertieren der Werte in Euro-Format, außer der ersten Spalte (Monat)
-        df_6['Monatliche Auszahlung'] = df_6['Monatliche Auszahlung'].apply(lambda x: f"{x:,.2f} €")
-        df_6['Monatliche Rendite'] = df_6['Monatliche Rendite'].apply(lambda x: f"{x:,.2f} €")
-        df_6['Restkapital'] = df_6['Restkapital'].apply(lambda x: f"{x:,.2f} €")
-        
-
-        # Anzeige des DataFrames
-        st.write(df_6)
+            
+            
+            # st.write(f'Nach {auszahlungsdauer} Jahren beträgt {restkapital_nach_auszahlungsdauer}')
+            
+            st.metric(label = 'Das Kapital ist vollständig aufgebraucht nach:', value = f'{monat // 12} Jahren und {monat % 12} Monaten', delta=None)
+            
+            st.divider()
+            #--------------------------------------------------------------------#
+            
+            df_6 = pd.DataFrame(daten, columns=['Monat', 'Monatliche Auszahlung', 'Monatliche Rendite', 'Restkapital'])
     
-
+            df_6.set_index("Monat", inplace=True)   
+            
+            # Konvertieren der Werte in Euro-Format, außer der ersten Spalte (Monat)
+            df_6['Monatliche Auszahlung'] = df_6['Monatliche Auszahlung'].apply(lambda x: f"{x:,.2f} €")
+            df_6['Monatliche Rendite'] = df_6['Monatliche Rendite'].apply(lambda x: f"{x:,.2f} €")
+            df_6['Restkapital'] = df_6['Restkapital'].apply(lambda x: f"{x:,.2f} €")
+            
+    
+            # Anzeige des DataFrames
+            st.write(df_6)
+        
 
